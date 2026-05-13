@@ -1,0 +1,320 @@
+GCCcore/11.3.0
+zlib/1.2.12-GCCcore-11.3.0
+binutils/2.38-GCCcore-11.3.0
+GCC/11.3.0
+Subread/2.0.4-GCC-11.3.0
+
+        ==========     _____ _    _ ____  _____  ______          _____  
+        =====         / ____| |  | |  _ \|  __ \|  ____|   /\   |  __ \ 
+          =====      | (___ | |  | | |_) | |__) | |__     /  \  | |  | |
+            ====      \___ \| |  | |  _ <|  _  /|  __|   / /\ \ | |  | |
+              ====    ____) | |__| | |_) | | \ \| |____ / ____ \| |__| |
+        ==========   |_____/ \____/|____/|_|  \_\______/_/    \_\_____/
+	  v2.0.4
+
+//========================== featureCounts setting ===========================\\
+||                                                                            ||
+||             Input files : 30 BAM files                                     ||
+||                                                                            ||
+||                           MTOP1-BT241-DMSO_S1_sorted.bam                   ||
+||                           MTOP2-BT241-DMSO_S2_sorted.bam                   ||
+||                           MTOP3-BT241-DMSO_S3_sorted.bam                   ||
+||                           MTOP4-BT-241-Bramaplam_S4_sorted.bam             ||
+||                           MTOP5-BT-241-Bramaplam_S5_sorted.bam             ||
+||                           MTOP6-BT-241-Bramaplam_S6_sorted.bam             ||
+||                           MTOP7-BT-972-AAVS1_S7_sorted.bam                 ||
+||                           MTOP8-BT-972-AAVS1_S8_sorted.bam                 ||
+||                           MTOP9-BT-972-AAVS1_S9_sorted.bam                 ||
+||                           MTOP10-BT-972-HTT-2-1_S10_sorted.bam             ||
+||                           MTOP11-BT-972-HTT-2-1_S11_sorted.bam             ||
+||                           MTOP12-BT-972-HTT-2-1_S12_sorted.bam             ||
+||                           MTOP13-BT-241-AAVS1_S13_sorted.bam               ||
+||                           MTOP14-BT-241-AAVS1_S14_sorted.bam               ||
+||                           MTOP15-BT-241-AAVS1_S15_sorted.bam               ||
+||                           MTOP16-BT-241-HTT-4-1_S16_sorted.bam             ||
+||                           MTOP17-BT-241-HTT-4-1_S17_sorted.bam             ||
+||                           MTOP18-BT-241-HTT-4-1_S18_sorted.bam             ||
+||                           MTOP19-BT-935-AAVS1_S19_sorted.bam               ||
+||                           MTOP20-BT-935-AAVS1_S20_sorted.bam               ||
+||                           MTOP21-BT-935-AAVS1_S21_sorted.bam               ||
+||                           MTOP22-BT-935-HTT-4-1_S22_sorted.bam             ||
+||                           MTOP23-BT-935-HTT-4-1_S23_sorted.bam             ||
+||                           MTOP24-BT-935-HTT-4-1_S24_sorted.bam             ||
+||                           SS1-KO-1_S25_sorted.bam                          ||
+||                           SS2-KO-2_S26_sorted.bam                          ||
+||                           SS3-KO-3_S27_sorted.bam                          ||
+||                           SS4-AAVS1-1_S28_sorted.bam                       ||
+||                           SS5-AAVS1-2_S29_sorted.bam                       ||
+||                           SS6-AAVS1-3_S30_sorted.bam                       ||
+||                                                                            ||
+||             Output file : all_samples_counts.txt                           ||
+||                 Summary : all_samples_counts.txt.summary                   ||
+||              Paired-end : yes                                              ||
+||        Count read pairs : no                                               ||
+||              Annotation : gencode.v45.annotation.gtf (GTF)                 ||
+||      Dir for temp files : /rds/projects/g/gendood-preclinomics/260306_ ... ||
+||                                                                            ||
+||                 Threads : 25                                               ||
+||                   Level : meta-feature level                               ||
+||      Multimapping reads : not counted                                      ||
+|| Multi-overlapping reads : not counted                                      ||
+||   Min overlapping bases : 1                                                ||
+||                                                                            ||
+\\============================================================================//
+
+//================================= Running ==================================\\
+||                                                                            ||
+|| Load annotation file gencode.v45.annotation.gtf ...                        ||
+||    Features : 1650704                                                      ||
+||    Meta-features : 63187                                                   ||
+||    Chromosomes/contigs : 25                                                ||
+||                                                                            ||
+|| Process BAM file MTOP1-BT241-DMSO_S1_sorted.bam...                         ||
+||    Strand specific : reversely stranded                                    ||
+||    Paired-end reads are included.                                          ||
+||    The reads are assigned on the single-end mode.                          ||
+||    Total alignments : 31692214                                             ||
+||    Successfully assigned alignments : 24945635 (78.7%)                     ||
+||    Running time : 0.08 minutes                                             ||
+||                                                                            ||
+|| Process BAM file MTOP2-BT241-DMSO_S2_sorted.bam...                         ||
+||    Strand specific : reversely stranded                                    ||
+||    Paired-end reads are included.                                          ||
+||    The reads are assigned on the single-end mode.                          ||
+||    Total alignments : 29018058                                             ||
+||    Successfully assigned alignments : 22717789 (78.3%)                     ||
+||    Running time : 0.08 minutes                                             ||
+||                                                                            ||
+|| Process BAM file MTOP3-BT241-DMSO_S3_sorted.bam...                         ||
+||    Strand specific : reversely stranded                                    ||
+||    Paired-end reads are included.                                          ||
+||    The reads are assigned on the single-end mode.                          ||
+||    Total alignments : 25284592                                             ||
+||    Successfully assigned alignments : 19629269 (77.6%)                     ||
+||    Running time : 0.07 minutes                                             ||
+||                                                                            ||
+|| Process BAM file MTOP4-BT-241-Bramaplam_S4_sorted.bam...                   ||
+||    Strand specific : reversely stranded                                    ||
+||    Paired-end reads are included.                                          ||
+||    The reads are assigned on the single-end mode.                          ||
+||    Total alignments : 23058106                                             ||
+||    Successfully assigned alignments : 17770535 (77.1%)                     ||
+||    Running time : 0.06 minutes                                             ||
+||                                                                            ||
+|| Process BAM file MTOP5-BT-241-Bramaplam_S5_sorted.bam...                   ||
+||    Strand specific : reversely stranded                                    ||
+||    Paired-end reads are included.                                          ||
+||    The reads are assigned on the single-end mode.                          ||
+||    Total alignments : 24066120                                             ||
+||    Successfully assigned alignments : 18669679 (77.6%)                     ||
+||    Running time : 0.07 minutes                                             ||
+||                                                                            ||
+|| Process BAM file MTOP6-BT-241-Bramaplam_S6_sorted.bam...                   ||
+||    Strand specific : reversely stranded                                    ||
+||    Paired-end reads are included.                                          ||
+||    The reads are assigned on the single-end mode.                          ||
+||    Total alignments : 27911946                                             ||
+||    Successfully assigned alignments : 21676194 (77.7%)                     ||
+||    Running time : 0.07 minutes                                             ||
+||                                                                            ||
+|| Process BAM file MTOP7-BT-972-AAVS1_S7_sorted.bam...                       ||
+||    Strand specific : reversely stranded                                    ||
+||    Paired-end reads are included.                                          ||
+||    The reads are assigned on the single-end mode.                          ||
+||    Total alignments : 27701120                                             ||
+||    Successfully assigned alignments : 21109884 (76.2%)                     ||
+||    Running time : 0.07 minutes                                             ||
+||                                                                            ||
+|| Process BAM file MTOP8-BT-972-AAVS1_S8_sorted.bam...                       ||
+||    Strand specific : reversely stranded                                    ||
+||    Paired-end reads are included.                                          ||
+||    The reads are assigned on the single-end mode.                          ||
+||    Total alignments : 37046954                                             ||
+||    Successfully assigned alignments : 28168978 (76.0%)                     ||
+||    Running time : 0.09 minutes                                             ||
+||                                                                            ||
+|| Process BAM file MTOP9-BT-972-AAVS1_S9_sorted.bam...                       ||
+||    Strand specific : reversely stranded                                    ||
+||    Paired-end reads are included.                                          ||
+||    The reads are assigned on the single-end mode.                          ||
+||    Total alignments : 34191100                                             ||
+||    Successfully assigned alignments : 25950368 (75.9%)                     ||
+||    Running time : 0.09 minutes                                             ||
+||                                                                            ||
+|| Process BAM file MTOP10-BT-972-HTT-2-1_S10_sorted.bam...                   ||
+||    Strand specific : reversely stranded                                    ||
+||    Paired-end reads are included.                                          ||
+||    The reads are assigned on the single-end mode.                          ||
+||    Total alignments : 31123502                                             ||
+||    Successfully assigned alignments : 24255495 (77.9%)                     ||
+||    Running time : 0.08 minutes                                             ||
+||                                                                            ||
+|| Process BAM file MTOP11-BT-972-HTT-2-1_S11_sorted.bam...                   ||
+||    Strand specific : reversely stranded                                    ||
+||    Paired-end reads are included.                                          ||
+||    The reads are assigned on the single-end mode.                          ||
+||    Total alignments : 31381294                                             ||
+||    Successfully assigned alignments : 24499766 (78.1%)                     ||
+||    Running time : 0.08 minutes                                             ||
+||                                                                            ||
+|| Process BAM file MTOP12-BT-972-HTT-2-1_S12_sorted.bam...                   ||
+||    Strand specific : reversely stranded                                    ||
+||    Paired-end reads are included.                                          ||
+||    The reads are assigned on the single-end mode.                          ||
+||    Total alignments : 29605302                                             ||
+||    Successfully assigned alignments : 23010633 (77.7%)                     ||
+||    Running time : 0.08 minutes                                             ||
+||                                                                            ||
+|| Process BAM file MTOP13-BT-241-AAVS1_S13_sorted.bam...                     ||
+||    Strand specific : reversely stranded                                    ||
+||    Paired-end reads are included.                                          ||
+||    The reads are assigned on the single-end mode.                          ||
+||    Total alignments : 28688812                                             ||
+||    Successfully assigned alignments : 21952517 (76.5%)                     ||
+||    Running time : 0.07 minutes                                             ||
+||                                                                            ||
+|| Process BAM file MTOP14-BT-241-AAVS1_S14_sorted.bam...                     ||
+||    Strand specific : reversely stranded                                    ||
+||    Paired-end reads are included.                                          ||
+||    The reads are assigned on the single-end mode.                          ||
+||    Total alignments : 32178614                                             ||
+||    Successfully assigned alignments : 24451621 (76.0%)                     ||
+||    Running time : 0.08 minutes                                             ||
+||                                                                            ||
+|| Process BAM file MTOP15-BT-241-AAVS1_S15_sorted.bam...                     ||
+||    Strand specific : reversely stranded                                    ||
+||    Paired-end reads are included.                                          ||
+||    The reads are assigned on the single-end mode.                          ||
+||    Total alignments : 31270216                                             ||
+||    Successfully assigned alignments : 23970230 (76.7%)                     ||
+||    Running time : 0.08 minutes                                             ||
+||                                                                            ||
+|| Process BAM file MTOP16-BT-241-HTT-4-1_S16_sorted.bam...                   ||
+||    Strand specific : reversely stranded                                    ||
+||    Paired-end reads are included.                                          ||
+||    The reads are assigned on the single-end mode.                          ||
+||    Total alignments : 37174212                                             ||
+||    Successfully assigned alignments : 28512036 (76.7%)                     ||
+||    Running time : 0.09 minutes                                             ||
+||                                                                            ||
+|| Process BAM file MTOP17-BT-241-HTT-4-1_S17_sorted.bam...                   ||
+||    Strand specific : reversely stranded                                    ||
+||    Paired-end reads are included.                                          ||
+||    The reads are assigned on the single-end mode.                          ||
+||    Total alignments : 31213864                                             ||
+||    Successfully assigned alignments : 24073962 (77.1%)                     ||
+||    Running time : 0.08 minutes                                             ||
+||                                                                            ||
+|| Process BAM file MTOP18-BT-241-HTT-4-1_S18_sorted.bam...                   ||
+||    Strand specific : reversely stranded                                    ||
+||    Paired-end reads are included.                                          ||
+||    The reads are assigned on the single-end mode.                          ||
+||    Total alignments : 29808470                                             ||
+||    Successfully assigned alignments : 23005538 (77.2%)                     ||
+||    Running time : 0.08 minutes                                             ||
+||                                                                            ||
+|| Process BAM file MTOP19-BT-935-AAVS1_S19_sorted.bam...                     ||
+||    Strand specific : reversely stranded                                    ||
+||    Paired-end reads are included.                                          ||
+||    The reads are assigned on the single-end mode.                          ||
+||    Total alignments : 32369554                                             ||
+||    Successfully assigned alignments : 25254914 (78.0%)                     ||
+||    Running time : 0.08 minutes                                             ||
+||                                                                            ||
+|| Process BAM file MTOP20-BT-935-AAVS1_S20_sorted.bam...                     ||
+||    Strand specific : reversely stranded                                    ||
+||    Paired-end reads are included.                                          ||
+||    The reads are assigned on the single-end mode.                          ||
+||    Total alignments : 29146068                                             ||
+||    Successfully assigned alignments : 22853150 (78.4%)                     ||
+||    Running time : 0.08 minutes                                             ||
+||                                                                            ||
+|| Process BAM file MTOP21-BT-935-AAVS1_S21_sorted.bam...                     ||
+||    Strand specific : reversely stranded                                    ||
+||    Paired-end reads are included.                                          ||
+||    The reads are assigned on the single-end mode.                          ||
+||    Total alignments : 30363830                                             ||
+||    Successfully assigned alignments : 23858040 (78.6%)                     ||
+||    Running time : 0.08 minutes                                             ||
+||                                                                            ||
+|| Process BAM file MTOP22-BT-935-HTT-4-1_S22_sorted.bam...                   ||
+||    Strand specific : reversely stranded                                    ||
+||    Paired-end reads are included.                                          ||
+||    The reads are assigned on the single-end mode.                          ||
+||    Total alignments : 35471398                                             ||
+||    Successfully assigned alignments : 27724488 (78.2%)                     ||
+||    Running time : 0.09 minutes                                             ||
+||                                                                            ||
+|| Process BAM file MTOP23-BT-935-HTT-4-1_S23_sorted.bam...                   ||
+||    Strand specific : reversely stranded                                    ||
+||    Paired-end reads are included.                                          ||
+||    The reads are assigned on the single-end mode.                          ||
+||    Total alignments : 35350838                                             ||
+||    Successfully assigned alignments : 27635070 (78.2%)                     ||
+||    Running time : 0.09 minutes                                             ||
+||                                                                            ||
+|| Process BAM file MTOP24-BT-935-HTT-4-1_S24_sorted.bam...                   ||
+||    Strand specific : reversely stranded                                    ||
+||    Paired-end reads are included.                                          ||
+||    The reads are assigned on the single-end mode.                          ||
+||    Total alignments : 35413428                                             ||
+||    Successfully assigned alignments : 27612857 (78.0%)                     ||
+||    Running time : 0.09 minutes                                             ||
+||                                                                            ||
+|| Process BAM file SS1-KO-1_S25_sorted.bam...                                ||
+||    Strand specific : reversely stranded                                    ||
+||    Paired-end reads are included.                                          ||
+||    The reads are assigned on the single-end mode.                          ||
+||    Total alignments : 33680330                                             ||
+||    Successfully assigned alignments : 26189585 (77.8%)                     ||
+||    Running time : 0.09 minutes                                             ||
+||                                                                            ||
+|| Process BAM file SS2-KO-2_S26_sorted.bam...                                ||
+||    Strand specific : reversely stranded                                    ||
+||    Paired-end reads are included.                                          ||
+||    The reads are assigned on the single-end mode.                          ||
+||    Total alignments : 30614718                                             ||
+||    Successfully assigned alignments : 23751376 (77.6%)                     ||
+||    Running time : 0.08 minutes                                             ||
+||                                                                            ||
+|| Process BAM file SS3-KO-3_S27_sorted.bam...                                ||
+||    Strand specific : reversely stranded                                    ||
+||    Paired-end reads are included.                                          ||
+||    The reads are assigned on the single-end mode.                          ||
+||    Total alignments : 37355524                                             ||
+||    Successfully assigned alignments : 28954764 (77.5%)                     ||
+||    Running time : 0.10 minutes                                             ||
+||                                                                            ||
+|| Process BAM file SS4-AAVS1-1_S28_sorted.bam...                             ||
+||    Strand specific : reversely stranded                                    ||
+||    Paired-end reads are included.                                          ||
+||    The reads are assigned on the single-end mode.                          ||
+||    Total alignments : 36794758                                             ||
+||    Successfully assigned alignments : 28512080 (77.5%)                     ||
+||    Running time : 0.09 minutes                                             ||
+||                                                                            ||
+|| Process BAM file SS5-AAVS1-2_S29_sorted.bam...                             ||
+||    Strand specific : reversely stranded                                    ||
+||    Paired-end reads are included.                                          ||
+||    The reads are assigned on the single-end mode.                          ||
+||    Total alignments : 37886410                                             ||
+||    Successfully assigned alignments : 29337742 (77.4%)                     ||
+||    Running time : 0.10 minutes                                             ||
+||                                                                            ||
+|| Process BAM file SS6-AAVS1-3_S30_sorted.bam...                             ||
+||    Strand specific : reversely stranded                                    ||
+||    Paired-end reads are included.                                          ||
+||    The reads are assigned on the single-end mode.                          ||
+||    Total alignments : 36015030                                             ||
+||    Successfully assigned alignments : 27889400 (77.4%)                     ||
+||    Running time : 0.09 minutes                                             ||
+||                                                                            ||
+|| Write the final count table.                                               ||
+|| Write the read assignment summary.                                         ||
+||                                                                            ||
+|| Summary of counting results can be found in file "/rds/projects/g/gendood  ||
+|| -preclinomics/260306_Singh-RNAseq/Matrix_featureCounts/all_samples_counts  ||
+|| .txt.summary"                                                              ||
+||                                                                            ||
+\\============================================================================//
+

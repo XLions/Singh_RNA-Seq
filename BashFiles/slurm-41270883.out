@@ -1,0 +1,48 @@
+GCCcore/8.3.0
+zlib/1.2.11-GCCcore-8.3.0
+binutils/2.32-GCCcore-8.3.0
+GCC/8.3.0
+numactl/2.0.12-GCCcore-8.3.0
+XZ/5.2.4-GCCcore-8.3.0
+libxml2/2.9.9-GCCcore-8.3.0
+libpciaccess/0.14-GCCcore-8.3.0
+hwloc/1.11.12-GCCcore-8.3.0
+UCX/1.6.1-GCCcore-8.3.0
+OpenMPI/3.1.6-GCC-8.3.0
+OpenBLAS/0.3.7-GCC-8.3.0
+gompi/2019b
+FFTW/3.3.8-gompi-2019b
+ScaLAPACK/2.0.2-gompi-2019b
+foss/2019b
+bzip2/1.0.8-GCCcore-8.3.0
+ncurses/6.1-GCCcore-8.3.0
+libreadline/8.0-GCCcore-8.3.0
+ncurses/6.1-GCCcore-8.3.0
+Tcl/8.6.9-GCCcore-8.3.0
+SQLite/3.29.0-GCCcore-8.3.0
+GMP/6.1.2-GCCcore-8.3.0
+libffi/3.2.1-GCCcore-8.3.0
+Python/3.7.4-GCCcore-8.3.0
+SciPy-bundle/2019.10-foss-2019b-Python-3.7.4
+libpng/1.6.37-GCCcore-8.3.0
+freetype/2.10.1-GCCcore-8.3.0
+expat/2.2.7-GCCcore-8.3.0
+util-linux/2.34-GCCcore-8.3.0
+fontconfig/2.13.1-GCCcore-8.3.0
+X11/20190717-GCCcore-8.3.0
+Tk/8.6.9-GCCcore-8.3.0
+Tkinter/3.7.4-GCCcore-8.3.0
+matplotlib/3.1.1-foss-2019b-Python-3.7.4
+libyaml/0.2.2-GCCcore-8.3.0
+PyYAML/5.1.2-GCCcore-8.3.0
+networkx/2.4-foss-2019b-Python-3.7.4
+MultiQC/1.9-foss-2019b-Python-3.7.4
+[WARNING]         multiqc : MultiQC Version v1.34 now available!
+[INFO   ]         multiqc : This is MultiQC v1.9
+[INFO   ]         multiqc : Template    : default
+[INFO   ]         multiqc : Searching   : /rds/projects/g/gendood-preclinomics/260306_Singh-RNAseq/QualityControl/FastQC
+[INFO   ]          fastqc : Found 60 reports
+[INFO   ]         multiqc : Compressing plot data
+[INFO   ]         multiqc : Report      : multiqc_report.html
+[INFO   ]         multiqc : Data        : multiqc_data
+[INFO   ]         multiqc : MultiQC complete

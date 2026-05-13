@@ -1,0 +1,28 @@
++--------------------------------------------------------------------------+
+| Job on the BlueBEAR cluster:
+| Starting at Thu Apr 30 21:52:37 2026 for zxl749(922177)
+| Identity jobid 41273133 jobname BAM_Bowtie2.sh
+| Running against project gendood-preclinomics and in partition icelake-shared
+| Requested cpu=30,mem=120G,node=1,billing=30 - 3-00:00:00 walltime
+| Allocated cpu=30,mem=120G,node=3,billing=30
+| Assigned to nodes bear-pg0203u12a,bear-pg0203u16b,bear-pg0203u19b
+| Command /rds/projects/g/gendood-preclinomics/260306_Singh-RNAseq/BashFiles/BAM_Bowtie2.sh
+| WorkDir /rds/projects/g/gendood-preclinomics/260306_Singh-RNAseq/BashFiles
++--------------------------------------------------------------------------+
++--------------------------------------------------------------------------+
+| Finished at Fri May  1 03:39:41 2026 for zxl749(922177) on the BlueBEAR Cluster
+| Required (2-15:18:37 cputime, 4022041K memory used) - 05:47:04 walltime
+| JobState COMPLETING - Reason None
+| Exitcode 0:0
++--------------------------------------------------------------------------+
+Job efficiency stats from seff for Job ID: 41273133
+Cluster: paddington
+User/Group: zxl749/users
+State: COMPLETED (exit code 0)
+Nodes: 3
+Cores per node: 10
+CPU Utilized: 2-15:18:38
+CPU Efficiency: 36.48% of 7-05:32:00 core-walltime
+Job Wall-clock time: 05:47:04
+Memory Utilized: 3.84 GB
+Memory Efficiency: 3.20% of 120.00 GB

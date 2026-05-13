@@ -1,0 +1,28 @@
++--------------------------------------------------------------------------+
+| Job on the BlueBEAR cluster:
+| Starting at Thu Apr 30 17:07:05 2026 for zxl749(922177)
+| Identity jobid 41268501 jobname fastqc.sh
+| Running against project gendood-preclinomics and in partition emerald-shared
+| Requested cpu=15,mem=60G,node=1,billing=15 - 01:20:00 walltime
+| Allocated cpu=15,mem=60G,node=1,billing=15
+| Assigned to nodes bear-pg0201u35b
+| Command /rds/projects/g/gendood-preclinomics/260306_Singh-RNAseq/BashFiles/fastqc.sh
+| WorkDir /rds/projects/g/gendood-preclinomics/260306_Singh-RNAseq/BashFiles
++--------------------------------------------------------------------------+
++--------------------------------------------------------------------------+
+| Finished at Thu Apr 30 17:57:50 2026 for zxl749(922177) on the BlueBEAR Cluster
+| Required (52:40.119 cputime, 937091K memory used) - 00:50:47 walltime
+| JobState COMPLETING - Reason None
+| Exitcode 0:0
++--------------------------------------------------------------------------+
+Job efficiency stats from seff for Job ID: 41268501
+Cluster: paddington
+User/Group: zxl749/users
+State: COMPLETED (exit code 0)
+Nodes: 1
+Cores per node: 15
+CPU Utilized: 00:52:40
+CPU Efficiency: 6.91% of 12:41:45 core-walltime
+Job Wall-clock time: 00:50:47
+Memory Utilized: 915.13 MB
+Memory Efficiency: 1.49% of 60.00 GB
