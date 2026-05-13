@@ -19,5 +19,7 @@ graph LR
 graph LR
     A[Expression Matrix] -- DESeq2 --> B[DEGs]
     A --> C[PCA]
-    B --> D[...]
+    C --> D(By Sample)
+    C --> E(By Comparison)
+    B --> F[...]
 ```
