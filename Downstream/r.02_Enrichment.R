@@ -61,8 +61,8 @@ getEnrichment<-function(ensembl_with_version){
   if (!is.null(ego) && nrow(as.data.frame(ego)) > 0) {
     saveRDS(ego,'ego.rds')
     
-    write_csv(as.data.frame(ego),"3.Rich_GO_enrich.csv")
-    write_csv(as.data.frame(ego) %>% filter(pvalue <= 0.05),"4.Rich_GO_enrich_sig.csv")
+    write_csv(as.data.frame(ego),"1.Rich_GO_enrich.csv")
+    write_csv(as.data.frame(ego) %>% filter(pvalue <= 0.05),"2.Rich_GO_enrich_sig.csv")
     
     go.df<-as.data.frame(ego) %>% filter(pvalue <= 0.05)
     
@@ -86,8 +86,8 @@ getEnrichment<-function(ensembl_with_version){
                        plot.title = element_text(size = 10,hjust = 0.5,face = "bold"),
                        legend.title = element_text(size = 10),
                        legend.text = element_text(size = 10))
-      ggsave('5.GO_bubble.pdf',GO_Plot,width = 10,height=6)
-      ggsave('5.GO_bubble.png',GO_Plot,width = 10,height=6,dpi=600)
+      ggsave('3.GO_bubble.pdf',GO_Plot,width = 10,height=6)
+      ggsave('3.GO_bubble.png',GO_Plot,width = 10,height=6,dpi=600)
     } else {
       message("No significant GO terms found (pvalue <= 0.05), skip GO bubble plot.")
     }
@@ -111,7 +111,7 @@ getEnrichment<-function(ensembl_with_version){
     ekegg_sig<-as.data.frame(ekegg) %>% filter(pvalue < 0.05)
     
     ekegg2 <- setReadable(ekegg, OrgDb = org.Hs.eg.db, keyType="ENTREZID")
-    write_csv(as.data.frame(ekegg2),"6.KEGG_enrich.csv")
+    write_csv(as.data.frame(ekegg2),"4.KEGG_enrich.csv")
     
     kegg.df <- ekegg2[order(ekegg2$pvalue),]
     if (nrow(kegg.df) > 0) {
@@ -148,8 +148,8 @@ getEnrichment<-function(ensembl_with_version){
                          plot.title = element_text(size = 10,hjust = 0.5,face = "bold"),
                          legend.title = element_text(size = 10),
                          legend.text = element_text(size = 10))
-        ggsave('7.KEGG_bubble.pdf',KEGG_Plot,width = 10,height=6)
-        ggsave('7.KEGG_bubble.png',KEGG_Plot,width = 10,height=6,dpi=600)
+        ggsave('5.KEGG_bubble.pdf',KEGG_Plot,width = 10,height=6)
+        ggsave('5.KEGG_bubble.png',KEGG_Plot,width = 10,height=6,dpi=600)
       } else {
         message("No KEGG terms left after top 10 slice, skip KEGG bubble plot.")
       }
