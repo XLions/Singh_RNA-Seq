@@ -25,6 +25,8 @@ getDEGs<-function(case_condition,
   library(psych)
   library(corrplot)
   library(ComplexHeatmap)
+  library(clusterProfiler)
+  library(org.Hs.eg.db)   # 请根据物种修改
   select=dplyr::select
   
   
@@ -42,7 +44,7 @@ getDEGs<-function(case_condition,
   group<-data.frame(
     sample=c(control_sample,case_sample),
     group=rep(c('Control','Case'),each=3)
-    )
+  )
   
   #因子化分组信息
   condition <- factor(c(group$group),#与列进行对应
@@ -76,11 +78,26 @@ getDEGs<-function(case_condition,
   
   # 提示不同方向的基因数量
   message(table(res1$Change) %>% as.data.frame())
-
+  
   # 如果满足条件（< PValue_cutoff），赋值为 'Sig'，否则赋值为 'Stable'
   res1$Sig <- ifelse(res1[[p_col]] < PValue_cutoff, 'Sig', 'Stable')
   
   if(P_Type=='Raw'){res1$pSelected<-res1$pvalue}else{res1$pSelected<-res1$padj}
+  
+  # 去除 Ensembl ID 的版本号（点号之后的部分）
+  ensembl_ids <- gsub("\\..*", "", rownames(res1))
+  # 使用 bitr 转换
+  id_map <- bitr(ensembl_ids, 
+                 fromType = "ENSEMBL", 
+                 toType = "SYMBOL", 
+                 OrgDb = org.Hs.eg.db, 
+                 drop = FALSE)   # 保留无法映射的，方便查找
+  # 将 Symbol 对应到 res1
+  res1$SYMBOL <- id_map$SYMBOL[match(ensembl_ids, id_map$ENSEMBL)]
+  # 若某些基因无对应 Symbol，可用原 Ensembl ID 填充，避免标签缺失
+  res1$LABEL <- ifelse(is.na(res1$SYMBOL) | res1$SYMBOL == "", 
+                       rownames(res1), 
+                       res1$SYMBOL)
   
   write.csv(res1,'1.DESeq2_res1.csv',row.names = T)
   
@@ -170,6 +187,107 @@ getDEGs<-function(case_condition,
   export::graph2pdf(ppp, 
                     file="./3.DEGs_deg_top_heatmap.pdf",
                     width=6.51,height=5.4)
+  
+  #05.Symbol版本-------------------------------------------------------------------
+  # ---  带 Symbol 标签的火山图 ---
+  # 沿用原来的 sig_diff 和 dat_rep 逻辑，但用 LABEL 来标记
+  sig_diff_sym <- res1[!res1$Change == 'Stable', ]
+  dat_rep_sym <- rbind(
+    head(sig_diff_sym[order(sig_diff_sym$log2FoldChange, decreasing = TRUE), ], 10),
+    head(sig_diff_sym[order(sig_diff_sym$log2FoldChange, decreasing = FALSE), ], 10)
+  )
+  
+  # 绘图
+  volcano_plot_symbol <- ggplot(data = res1, 
+                                aes(x = log2FoldChange, 
+                                    y = -log10(pSelected), 
+                                    color = Change)) +
+    scale_color_manual(values = c("blue", "darkgray", "darkorange")) +
+    scale_x_continuous(breaks = seq(-5, 5, 1) 
+                       # limits = c(-7, 7)
+                       ) +
+    scale_y_continuous(trans = "log1p", limits = c(0, 10), breaks = c(0, 1, 3, 10, 30)) +
+    geom_point(size = 1.2, alpha = 0.4, na.rm = TRUE) +
+    theme_bw(base_size = 12, base_family = "Times") +
+    geom_vline(xintercept = c(-logFC_cutoff, logFC_cutoff), 
+               lty = 4, col = "darkgray", lwd = 0.6) +
+    geom_hline(yintercept = -log10(PValue_cutoff), 
+               lty = 4, col = "darkgray", lwd = 0.6) +
+    theme(legend.position = "right",
+          panel.grid = element_blank(),
+          legend.title = element_blank(),
+          legend.text = element_text(face = "bold", color = "black", 
+                                     family = "Times", size = 13),
+          plot.title = element_text(face = 'bold', hjust = 0.5),
+          axis.text.x = element_text(face = "bold", color = "black", size = 15),
+          axis.text.y = element_text(face = "bold", color = "black", size = 15),
+          axis.title.x = element_text(face = "bold", color = "black", size = 15),
+          axis.title.y = element_text(face = "bold", color = "black", size = 15)) +
+    geom_label_repel(data = dat_rep_sym, 
+                     aes(label = LABEL),   # 此处换为 Symbol 标签
+                     max.overlaps = 20, size = 4,
+                     box.padding = unit(0.5, "lines"),
+                     min.segment.length = 0,
+                     point.padding = unit(0.8, "lines"), 
+                     segment.color = "black", show.legend = FALSE) +
+    labs(x = "log2(Fold Change)",
+         y = ifelse(P_Type == 'Raw', '-log10(P.Value)', '-log10(P.Adjust)'),
+         title = paste0(case_condition, ' vs. ', control_condition, ' (Symbol label)'))
+  
+  # 保存
+  export::graph2png(volcano_plot_symbol,
+                    file = './4.DEGs_volcano_symbol.png',
+                    width = 8.78, height = 7.43, dpi = 600)
+  export::graph2pdf(volcano_plot_symbol,
+                    file = './4.DEGs_volcano_symbol.pdf',
+                    width = 8.78, height = 7.43)
+  
+  # ---  带 Symbol 标签的热图 ---
+  # 获取 top10 上下调基因对应的 Symbol
+  top10_gene_down_sym <- rownames(sig_diff_sym %>% 
+                                    arrange(log2FoldChange) %>% 
+                                    head(10))
+  top10_gene_up_sym <- rownames(sig_diff_sym %>% 
+                                  arrange(desc(log2FoldChange)) %>% 
+                                  head(10))
+  top_gene_sym <- c(top10_gene_down_sym, top10_gene_up_sym)
+  
+  # 提取这些基因的表达数据，并用 Symbol 作为行名
+  # 注意：countData 行名仍是 Ensembl ID，需要替换
+  rt_sym <- countData[top_gene_sym, group$sample, drop = FALSE]
+  # 构建行名映射：从 res1 获取对应 LABEL
+  rownames(rt_sym) <- res1[top_gene_sym, "LABEL"]
+  
+  # 归一化与绘图
+  mat_sym <- t(scale(t(rt_sym)))
+  mat_sym[mat_sym < -2] <- -2
+  mat_sym[mat_sym > 2] <- 2
+  # 确保列名顺序与 group 一致
+  mat_sym <- mat_sym[, group$sample]
+  
+  ppp_symbol <- densityHeatmap(mat_sym, 
+                               title = "Distribution as heatmap (Symbol)", 
+                               ylab = " ",
+                               height = unit(3, "cm")) %v%
+    HeatmapAnnotation(Group = group$group, 
+                      col = list(Group = c("Case" = "#B72230",
+                                           "Control" = "#104680"))) %v%
+    Heatmap(mat_sym,
+            row_names_gp = gpar(fontsize = 7),
+            show_column_names = FALSE,
+            show_row_names = TRUE,
+            name = "expression",
+            cluster_rows = FALSE,
+            height = unit(6, "cm"),
+            col = colorRampPalette(c("#0A878D", "white", "#D80305"))(100))
+  
+  # 保存
+  export::graph2png(ppp_symbol, 
+                    file = "./5.DEGs_deg_top_heatmap_symbol.png",
+                    width = 6.51, height = 5.4, dpi = 600)
+  export::graph2pdf(ppp_symbol, 
+                    file = "./5.DEGs_deg_top_heatmap_symbol.pdf",
+                    width = 6.51, height = 5.4)
 }
 
 # 读取数据
@@ -269,7 +387,6 @@ for(i in 1:length(compares)){
   ggsave("Venn_Diagram_DEGs.png", plot = venn_plot, width = 12, height = 9,dpi=600)
   
 }
-
 
 
 
