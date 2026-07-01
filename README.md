@@ -18,7 +18,7 @@ graph LR
 *   **2. Downstream: Based on Expression Matrix (.csv)**
 ```mermaid
 graph LR
-    A[Expression Matrix] -- DESeq2 --> B[DEGs]
+    A[Expression Matrix] -- DESeq2 --> B[DEGs] -- GO/KEGG --> G[Pathway Enrichment]
     A --> C[PCA]
     C --> D(By Sample)
     C --> E(By Comparison)
