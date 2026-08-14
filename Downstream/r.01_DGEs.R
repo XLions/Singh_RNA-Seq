@@ -41,9 +41,10 @@ getDEGs<-function(case_condition,
   )
   
   #组件分组信息矩阵
+  stopifnot(length(control_sample) > 0, length(case_sample) > 0)
   group<-data.frame(
     sample=c(control_sample,case_sample),
-    group=rep(c('Control','Case'),each=3)
+    group=rep(c('Control','Case'),times=c(length(control_sample), length(case_sample)))
   )
   
   #因子化分组信息
@@ -56,8 +57,12 @@ getDEGs<-function(case_condition,
                                 colData = colData, #样本信息
                                 design = ~ condition)#分组信息
   #标准化
-  dds1 <- DESeq(dds, fitType = 'mean', #使用均值作为拟合模型
-                minReplicatesForReplace = 3)
+  # dds1 <- DESeq(dds, 
+  #               fitType = 'mean', #使用均值作为拟合模型 所有基因共用一个离散度，只有在 parametric/local 都拟合失败时才当兜底用。这里等于放弃了 DESeq2 最核心的离散度收缩，会显著改变 p 值和 DEG 数量。
+  #               minReplicatesForReplace = 3
+  #               )
+  # 使用默认参数
+  dds1 <- DESeq(dds)
   #将结果用result()函数来获取
   res <- results(dds1)
   #res格式转化：用data.frame转化为表格形式
@@ -110,8 +115,12 @@ getDEGs<-function(case_condition,
   #绘图
   volcano_plot <- ggplot(data = res1,aes(x = log2FoldChange,y = -log10(pSelected),color =Change)) +
     scale_color_manual(values = c("blue", "darkgray","darkorange")) +
-    scale_x_continuous(breaks = seq(-5,5,1),limits = c(-7,7)) +
-    scale_y_continuous(trans = "log1p",limits = c(0,10),breaks=c(0,1,3,10,30)) +
+    scale_x_continuous(breaks = seq(-5,5,1)
+                       # limits = c(-7,7)
+                       ) +
+    scale_y_continuous(trans = "log1p",
+                       # limits = c(0,10),
+                       breaks=c(0,1,5,10,30)) +
     geom_point(size = 1.2, alpha = 0.4, na.rm=T) +
     theme_bw(base_size = 12, base_family = "Times") +
     geom_vline(xintercept = c(-logFC_cutoff,logFC_cutoff), lty = 4, col = "darkgray", lwd = 0.6)+
@@ -152,7 +161,9 @@ getDEGs<-function(case_condition,
                               head(10))
   top_gene <- c(top10_gene_down,top10_gene_up)
   #分组信息
-  rt <- countData[top_gene,group$sample]
+  #vst
+  vsd <- assay(vst(dds1, blind = FALSE))
+  rt  <- vsd[top_gene, group$sample]
   group<-group[order(group$group),]
   x <- rt
   mat <- t(scale(t(x)))#归一化
@@ -206,7 +217,9 @@ getDEGs<-function(case_condition,
     scale_x_continuous(breaks = seq(-5, 5, 1) 
                        # limits = c(-7, 7)
                        ) +
-    scale_y_continuous(trans = "log1p", limits = c(0, 10), breaks = c(0, 1, 3, 10, 30)) +
+    scale_y_continuous(trans = "log1p", 
+                       # limits = c(0, 10), 
+                       breaks = c(0, 1, 3, 10, 30)) +
     geom_point(size = 1.2, alpha = 0.4, na.rm = TRUE) +
     theme_bw(base_size = 12, base_family = "Times") +
     geom_vline(xintercept = c(-logFC_cutoff, logFC_cutoff), 
@@ -253,10 +266,13 @@ getDEGs<-function(case_condition,
   top_gene_sym <- c(top10_gene_down_sym, top10_gene_up_sym)
   
   # 提取这些基因的表达数据，并用 Symbol 作为行名
-  # 注意：countData 行名仍是 Ensembl ID，需要替换
-  rt_sym <- countData[top_gene_sym, group$sample, drop = FALSE]
-  # 构建行名映射：从 res1 获取对应 LABEL
-  rownames(rt_sym) <- res1[top_gene_sym, "LABEL"]
+  # 改用 vst（与前一张热图一致，A2 的修复）
+  rt_sym <- vsd[top_gene_sym, group$sample, drop = FALSE]
+  
+  # 行名换成 Symbol；重名时自动加 .1 .2 后缀
+  lab <- as.character(res1[top_gene_sym, "LABEL"])
+  lab[is.na(lab) | lab == ""] <- top_gene_sym[is.na(lab) | lab == ""]
+  rownames(rt_sym) <- make.unique(lab)
   
   # 归一化与绘图
   mat_sym <- t(scale(t(rt_sym)))

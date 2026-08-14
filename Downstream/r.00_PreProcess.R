@@ -48,7 +48,7 @@ library(tidyverse)
     fpkm_df<- fpkm_df %>% column_to_rownames('Geneid')
     
     # 将结果保存为新的 CSV 或 TXT 文件
-    write.csv(fpkm_df, file = "fpkm.csv", row.names = FALSE)
+    write.csv(fpkm_df, file = "fpkm.csv", row.names = T)
     saveRDS(fpkm_df,"fpkm.RDS")
   }
   
@@ -59,7 +59,7 @@ library(tidyverse)
       dplyr::select(-c("Length")) %>% column_to_rownames('Geneid')
     
     # 将结果保存为新的 CSV 或 TXT 文件
-    write.csv(raw_counts, file = "counts.csv", row.names = FALSE)
+    write.csv(raw_counts, file = "counts.csv", row.names = T)
     saveRDS(raw_counts,"counts.RDS")
   }
 }

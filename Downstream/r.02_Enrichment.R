@@ -49,7 +49,11 @@ getEnrichment<-function(ensembl_with_version){
   pvalueCutoff <- 0.05
   qvalueCutoff <- 0.05
   
-  ego <- enrichGO(gene = as.numeric(symbol2entrezid$ENTREZID),
+  ego <- enrichGO(gene = 
+                    # as.numeric(
+                    symbol2entrezid$ENTREZID
+                  # )
+                  ,
                   keyType = "ENTREZID",
                   OrgDb = org.Hs.eg.db, 
                   pvalueCutoff = pvalueCutoff, 
@@ -64,10 +68,10 @@ getEnrichment<-function(ensembl_with_version){
     write_csv(as.data.frame(ego),"1.Rich_GO_enrich.csv")
     write_csv(as.data.frame(ego) %>% filter(pvalue <= 0.05),"2.Rich_GO_enrich_sig.csv")
     
-    go.df<-as.data.frame(ego) %>% filter(pvalue <= 0.05)
+    go.df1<-as.data.frame(ego) %>% filter(pvalue <= 0.05)
     
-    if (nrow(go.df) > 0) {
-      go.df <- go.df %>% group_by(ONTOLOGY) %>% slice_head(n=5)
+    if (nrow(go.df1) > 0) {
+      go.df <- go.df1 %>% group_by(ONTOLOGY) %>% slice_head(n=5)
       # 使画出的GO term的顺序与输入一致
       go.df$Description <- factor(go.df$Description,levels = rev(go.df$Description))
       # 绘图 plot
@@ -86,8 +90,31 @@ getEnrichment<-function(ensembl_with_version){
                        plot.title = element_text(size = 10,hjust = 0.5,face = "bold"),
                        legend.title = element_text(size = 10),
                        legend.text = element_text(size = 10))
-      ggsave('3.GO_bubble.pdf',GO_Plot,width = 10,height=6)
-      ggsave('3.GO_bubble.png',GO_Plot,width = 10,height=6,dpi=600)
+      ggsave('3.GO_bubble_top5.pdf',GO_Plot,width = 10,height=6)
+      ggsave('3.GO_bubble_top5.png',GO_Plot,width = 10,height=6,dpi=600)
+      
+      go.df <- go.df1 %>% group_by(ONTOLOGY) %>% slice_head(n=10)
+      # 使画出的GO term的顺序与输入一致
+      go.df$Description <- factor(go.df$Description,levels = rev(go.df$Description))
+      # 绘图 plot
+      GO_Plot<-
+        ggplot(data = go.df)+
+        geom_point(aes(x = Description, y=(-log10(pvalue)), 
+                       size = Count,color = ONTOLOGY))+
+        scale_color_manual(values = c("#0000CD","orange","#43CD80"))+
+        coord_flip()+
+        theme_bw()+
+        scale_x_discrete(labels = function(x) str_wrap(x,width = 50))+
+        labs(x = "GO terms",y = paste0('-log10(P)'))+
+        ggtitle('GO Enrichment')+
+        ggplot2::theme(axis.title = element_text(size = 13),
+                       axis.text = element_text(size = 11),
+                       plot.title = element_text(size = 10,hjust = 0.5,face = "bold"),
+                       legend.title = element_text(size = 10),
+                       legend.text = element_text(size = 10))
+      ggsave('4.GO_bubble_top10.pdf',GO_Plot,width = 10,height=12)
+      ggsave('4.GO_bubble_top10.png',GO_Plot,width = 10,height=12,dpi=600)
+      
     } else {
       message("No significant GO terms found (pvalue <= 0.05), skip GO bubble plot.")
     }
@@ -111,7 +138,7 @@ getEnrichment<-function(ensembl_with_version){
     ekegg_sig<-as.data.frame(ekegg) %>% filter(pvalue < 0.05)
     
     ekegg2 <- setReadable(ekegg, OrgDb = org.Hs.eg.db, keyType="ENTREZID")
-    write_csv(as.data.frame(ekegg2),"4.KEGG_enrich.csv")
+    write_csv(as.data.frame(ekegg2),"5.KEGG_enrich.csv")
     
     kegg.df <- ekegg2[order(ekegg2$pvalue),]
     if (nrow(kegg.df) > 0) {
@@ -129,9 +156,9 @@ getEnrichment<-function(ensembl_with_version){
           )
       }
       
-      kegg_df_top<-kegg.df %>% 
-        slice_head(n=10)
-      if (nrow(kegg_df_top) > 0) {
+      if (nrow(kegg.df) > 0) {
+        kegg_df_top<-kegg.df %>% 
+          slice_head(n=10)
         kegg_df_top$Description <- factor(kegg_df_top$Description,levels = rev(kegg_df_top$Description))
         KEGG_Plot<-
           ggplot(data = kegg_df_top)+
@@ -148,8 +175,31 @@ getEnrichment<-function(ensembl_with_version){
                          plot.title = element_text(size = 10,hjust = 0.5,face = "bold"),
                          legend.title = element_text(size = 10),
                          legend.text = element_text(size = 10))
-        ggsave('5.KEGG_bubble.pdf',KEGG_Plot,width = 10,height=6)
-        ggsave('5.KEGG_bubble.png',KEGG_Plot,width = 10,height=6,dpi=600)
+        ggsave('6.KEGG_bubble_top10.pdf',KEGG_Plot,width = 10,height=6)
+        ggsave('6.KEGG_bubble_top10.png',KEGG_Plot,width = 10,height=6,dpi=600)
+        
+        if(nrow(kegg.df) > 10){
+          kegg_df_top<-kegg.df %>% 
+            slice_head(n=20)
+          kegg_df_top$Description <- factor(kegg_df_top$Description,levels = rev(kegg_df_top$Description))
+          KEGG_Plot<-
+            ggplot(data = kegg_df_top)+
+            geom_point(aes(x = Description, y=GeneRatio_Number, size = Count,color = (-log10(pvalue))))+
+            scale_color_gradient(low="blue",high="red")+
+            coord_flip()+
+            theme_bw()+
+            scale_x_discrete(labels = function(x) str_wrap(x,width = 50))+
+            labs(x = "KEGG terms",y = "GeneRatio", 
+                 color = paste0('-log10(P)'))+
+            ggtitle('KEGG Enrichment')+
+            ggplot2::theme(axis.title = element_text(size = 13),
+                           axis.text = element_text(size = 11),
+                           plot.title = element_text(size = 10,hjust = 0.5,face = "bold"),
+                           legend.title = element_text(size = 10),
+                           legend.text = element_text(size = 10))
+          ggsave('7.KEGG_bubble_top20.pdf',KEGG_Plot,width = 10,height=12)
+          ggsave('7.KEGG_bubble_top20.png',KEGG_Plot,width = 10,height=12,dpi=600)
+        }
       } else {
         message("No KEGG terms left after top 10 slice, skip KEGG bubble plot.")
       }
@@ -160,6 +210,7 @@ getEnrichment<-function(ensembl_with_version){
     message("No KEGG enrichment results, skip all KEGG steps.")
   }
 }
+
 
 # 建立比较组
 compares<-c(
@@ -173,10 +224,70 @@ compares<-c(
 # 建立循环进行分析
 for(i in 1:length(compares)){
   if(!dir.exists(compares[i])){dir.create(compares[i])};setwd(compares[i])
-  
+  message('\n---------------------\n',compares[i],' Start\n')
   DEGs_res1<-read.csv(paste0('../../01_DEGs/',compares[i],'/1.DESeq2_res1.csv'),
                       row.names = 1)
   getEnrichment(rownames(DEGs_res1)[which(DEGs_res1$Change!='Stable')])
   setwd('../')
+  message('\n',compares[i],' End','\n---------------------\n')
 }
+# ---------------------
+# BT241_DSMO_Drug Start
+# 
+# 'select()' returned 1:many mapping between keys and columns
+# 
+# BT241_DSMO_Drug End
+# ---------------------
+#   
+#   
+# ---------------------
+# BT972_AAVS1_HTT2-1(KO) Start
+# 
+# 'select()' returned 1:many mapping between keys and columns
+# 
+# BT972_AAVS1_HTT2-1(KO) End
+# ---------------------
+#   
+#   
+# ---------------------
+# BT241_AAVS1_HTT4-1(KO) Start
+# 
+# 'select()' returned 1:1 mapping between keys and columns
+# No GO enrichment results, skip all GO steps.
+# No KEGG enrichment results, skip all KEGG steps.
+# 
+# BT241_AAVS1_HTT4-1(KO) End
+# ---------------------
+#   
+#   
+# ---------------------
+# BT935_AAVS1_HTT4-1(KO) Start
+# 
+# 'select()' returned 1:many mapping between keys and columns
+# 
+# BT935_AAVS1_HTT4-1(KO) End
+# ---------------------
+#   
+#   
+# ---------------------
+# SS_AAVS1_ROBO1(KO) Start
+# 
+# 'select()' returned 1:many mapping between keys and columns
+# 
+# SS_AAVS1_ROBO1(KO) End
+# ---------------------
 
+# 警告信息:
+# 1: In bitr(geneID = ensembl_clean, fromType = "ENSEMBL", toType = "ENTREZID",  :
+#   19.3% of input gene IDs are fail to map...
+# 2: In bitr(geneID = ensembl_clean, fromType = "ENSEMBL", toType = "ENTREZID",  :
+#   22.21% of input gene IDs are fail to map...
+# 3: In bitr(geneID = ensembl_clean, fromType = "ENSEMBL", toType = "ENTREZID",  :
+#   7.89% of input gene IDs are fail to map...
+# 4: In bitr(geneID = ensembl_clean, fromType = "ENSEMBL", toType = "ENTREZID",  :
+#   6.43% of input gene IDs are fail to map...
+# 5: In bitr(geneID = ensembl_clean, fromType = "ENSEMBL", toType = "ENTREZID",  :
+#   4.1% of input gene IDs are fail to map...
+
+#回头检验：BT241_AAVS1_HTT4-1(KO)
+#DEGs数量太少：可以尝试降低logFC cutoff
